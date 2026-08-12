@@ -724,6 +724,9 @@
     <!-- 回到顶部按钮 -->
     <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
+    <!-- Supabase JS 客户端 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
         // ========== 移动端菜单 ==========
         function toggleMenu() {
@@ -751,32 +754,48 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ========== 留言功能（前端存储） ==========
+        // ========== Supabase 配置 ==========
+        // 把下面两个值替换成你自己的 Supabase 项目信息
+        const SUPABASE_URL = 'https://fhnxptyiosdkxruyaeca.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobnhwdHlpb3Nka3hydXlhZWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1Mzk5MDQsImV4cCI6MjEwMjExNTkwNH0.w2Op0NNrQmmBbd9jNt4wXqzW4nVjpl5mE3bHAGQT8CQ';
+
+        // 初始化 Supabase 客户端
+        let supabaseClient = null;
+        let supabaseReady = false;
+
+        try {
+            if (SUPABASE_URL.includes('在此填入')) {
+                console.warn('Supabase 未配置，留言功能使用本地模式');
+            } else {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                supabaseReady = true;
+            }
+        } catch (err) {
+            console.error('Supabase 初始化失败:', err);
+        }
+
+        // ========== 留言功能（云端 + 本地回退） ==========
         const commentForm = document.getElementById('commentForm');
         const commentList = document.getElementById('commentList');
         const noComments = document.getElementById('noComments');
 
-        // 从 localStorage 读取留言
-        function loadComments() {
-            const saved = localStorage.getItem('mubai_comments');
-            if (saved) {
-                const comments = JSON.parse(saved);
-                if (comments.length > 0) {
-                    noComments.style.display = 'none';
-                    comments.forEach(c => addCommentToDOM(c.name, c.text, c.time, c.likes, false));
-                }
-            }
+        // 转义 HTML 防注入
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         // 添加留言到页面
-        function addCommentToDOM(name, text, time, likes, isNew) {
+        function addCommentToDOM(id, name, text, time, likes, isNew) {
             const div = document.createElement('div');
             div.className = 'comment-item';
+            div.dataset.id = id;
             div.innerHTML = `
                 <div class="comment-author">${escapeHtml(name)}</div>
                 <div class="comment-time">${time}</div>
                 <div class="comment-text">${escapeHtml(text)}</div>
-                <button class="like-btn" onclick="toggleLike(this)">
+                <button class="like-btn" onclick="toggleLike(this, ${id})">
                     <span>👍</span>
                     <span class="like-count">${likes}</span>
                 </button>
@@ -788,17 +807,52 @@
             }
         }
 
-        // 转义 HTML 防注入
-        function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+        // 格式化时间
+        function formatTime(dateStr) {
+            const d = new Date(dateStr);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        }
+
+        // 从云端加载留言
+        async function loadComments() {
+            if (!supabaseReady) {
+                // 本地回退模式
+                const saved = localStorage.getItem('mubai_comments');
+                if (saved) {
+                    const comments = JSON.parse(saved);
+                    if (comments.length > 0) {
+                        noComments.style.display = 'none';
+                        comments.forEach(c => addCommentToDOM(c.id || Date.now(), c.name, c.text, c.time, c.likes || 0, false));
+                    }
+                }
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('comments')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    noComments.style.display = 'none';
+                    data.forEach(c => {
+                        addCommentToDOM(c.id, c.name, c.message, formatTime(c.created_at), c.likes || 0, false);
+                    });
+                }
+            } catch (err) {
+                console.error('加载留言失败:', err);
+                noComments.textContent = '留言加载失败，请稍后刷新重试';
+            }
         }
 
         // 点赞功能
-        function toggleLike(btn) {
+        async function toggleLike(btn, commentId) {
             const countSpan = btn.querySelector('.like-count');
             let count = parseInt(countSpan.textContent);
+
             if (btn.classList.contains('liked')) {
                 btn.classList.remove('liked');
                 count--;
@@ -807,15 +861,29 @@
                 count++;
             }
             countSpan.textContent = count;
-            saveComments();
+
+            // 更新到云端
+            if (supabaseReady) {
+                try {
+                    await supabaseClient
+                        .from('comments')
+                        .update({ likes: count })
+                        .eq('id', commentId);
+                } catch (err) {
+                    console.error('点赞更新失败:', err);
+                }
+            } else {
+                saveCommentsLocal();
+            }
         }
 
-        // 保存留言到 localStorage
-        function saveComments() {
+        // 本地存储（回退模式）
+        function saveCommentsLocal() {
             const items = document.querySelectorAll('.comment-item');
             const comments = [];
             items.forEach(item => {
                 comments.push({
+                    id: parseInt(item.dataset.id),
                     name: item.querySelector('.comment-author').textContent,
                     text: item.querySelector('.comment-text').textContent,
                     time: item.querySelector('.comment-time').textContent,
@@ -826,20 +894,51 @@
         }
 
         // 表单提交
-        commentForm.addEventListener('submit', (e) => {
+        commentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
             const text = document.getElementById('message').value.trim();
             if (!name || !text) return;
 
-            const now = new Date();
-            const time = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const submitBtn = commentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '发送中...';
+            submitBtn.disabled = true;
 
-            noComments.style.display = 'none';
-            addCommentToDOM(name, text, time, 0, true);
-            saveComments();
+            if (supabaseReady) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('comments')
+                        .insert({ name: name, message: text, likes: 0 })
+                        .select();
+
+                    if (error) throw error;
+
+                    if (data && data.length > 0) {
+                        const c = data[0];
+                        noComments.style.display = 'none';
+                        addCommentToDOM(c.id, c.name, c.message, formatTime(c.created_at), 0, true);
+                    }
+                } catch (err) {
+                    console.error('发送留言失败:', err);
+                    alert('留言发送失败，请稍后重试');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+            } else {
+                // 本地回退模式
+                const now = new Date();
+                const time = formatTime(now.toISOString());
+                const id = Date.now();
+                noComments.style.display = 'none';
+                addCommentToDOM(id, name, text, time, 0, true);
+                saveCommentsLocal();
+            }
 
             commentForm.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         });
 
         // 页面加载时读取留言

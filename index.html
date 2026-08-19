@@ -631,6 +631,81 @@
             transform: translateX(8px);
         }
 
+        /* ========== 白名单赛事入口 ========== */
+        .featured-competitions {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            display: block;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-competitions::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .featured-competitions:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        .featured-competitions .featured-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .featured-competitions h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .featured-competitions p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .featured-competitions .featured-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .featured-competitions .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .featured-competitions .featured-arrow {
+            position: absolute;
+            bottom: 2.5rem;
+            right: 2.5rem;
+            font-size: 1.5rem;
+            color: #FFD700;
+            transition: var(--transition);
+        }
+        .featured-competitions:hover .featured-arrow {
+            transform: translateX(8px);
+        }
+
         /* ========== 响应式 ========== */
         @media (max-width: 768px) {
             nav {
@@ -696,6 +771,7 @@
         <ul id="navMenu">
             <li><a href="#about">关于我</a></li>
             <li><a href="#schools">深圳高中</a></li>
+            <li><a href="#competitions">赛事指南</a></li>
             <li><a href="#platforms">平台</a></li>
             <li><a href="#projects">项目想法</a></li>
             <li><a href="#contact">留言</a></li>
@@ -744,6 +820,24 @@
                 <div class="stat-item"><span>区域</span><span>12个区</span></div>
                 <div class="stat-item"><span>数据</span><span>录取分数线</span></div>
                 <div class="stat-item"><span>图片</span><span>校园实景</span></div>
+            </div>
+            <span class="featured-arrow">→</span>
+        </a>
+    </section>
+
+    <!-- 白名单赛事 -->
+    <section id="competitions">
+        <h2 class="section-title">教育部白名单赛事</h2>
+        <p class="section-subtitle">2025—2028学年官方认证竞赛全指南</p>
+        <a href="whitelist-competitions/whitelist-competitions.html" class="featured-competitions">
+            <span class="featured-badge">2025-2028学年</span>
+            <h3>2025—2028学年教育部白名单赛事全指南</h3>
+            <p>涵盖教育部官方认可的全部白名单赛事，包含赛事简介、主办单位、面向学段、报名时间、赛事特色及含金量分析，帮助学生和家长科学规划竞赛路径。</p>
+            <div class="featured-stats">
+                <div class="stat-item"><span>赛事</span><span>白名单全覆盖</span></div>
+                <div class="stat-item"><span>学段</span><span>小学至高中</span></div>
+                <div class="stat-item"><span>内容</span><span>报名指南</span></div>
+                <div class="stat-item"><span>分析</span><span>含金量评估</span></div>
             </div>
             <span class="featured-arrow">→</span>
         </a>

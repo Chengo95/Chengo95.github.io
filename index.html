@@ -357,6 +357,109 @@
             color: #27ae60;
         }
 
+        .status-open {
+            background: rgba(43, 108, 208, 0.15);
+            color: #2B6CD0;
+        }
+
+        /* ========== 开源项目区块 ========== */
+        .opensource-section {
+            margin-top: 2.5rem;
+        }
+
+        .opensource-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .opensource-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .opensource-header .tag-count {
+            background: rgba(43, 108, 208, 0.1);
+            color: #2B6CD0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+        }
+
+        .opensource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .opensource-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid #2B6CD0;
+        }
+
+        .opensource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .opensource-card .status {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .opensource-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .opensource-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .opensource-card .repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: #2B6CD0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .opensource-card .repo-link:hover {
+            color: #1a4a9e;
+        }
+
+        .opensource-card .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+
+        .opensource-card .tech-stack span {
+            background: var(--bg-light);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+
         .project-card h3 {
             font-size: 1.15rem;
             margin-bottom: 0.5rem;
@@ -938,6 +1041,11 @@
                 <h3>每日灵感打卡</h3>
                 <p>一个轻量级的小应用，每天记录一个灵感或想法，支持回看和统计，帮助养成持续思考和记录的习惯。</p>
             </div>
+            <a href="opensource-projects/index.html" class="project-card" style="text-decoration:none;cursor:pointer;border-top:4px solid #2B6CD0;">
+                <span class="status status-open">📖 开源</span>
+                <h3>开源项目</h3>
+                <p>AI 桌宠机械狗、普通桌宠机械狗、遥控机械手等开源硬件项目，点击查看详情。</p>
+            </a>
         </div>
     </section>
 

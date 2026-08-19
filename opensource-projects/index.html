@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开源项目 - 木白</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f6d7a;
+            --primary-light: #7a9eab;
+            --accent: #e8a87c;
+            --bg-dark: #2c3e50;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --text-muted: #7f8c8d;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+            --opensource-color: #2B6CD0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+        }
+
+        nav .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        nav .back-btn {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav .back-btn:hover { color: var(--accent); }
+
+        /* Hero */
+        .page-hero {
+            background: linear-gradient(135deg, #1a365d 0%, #2B6CD0 100%);
+            color: var(--text-light);
+            padding: 7rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-hero p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 内容区 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* 项目卡片 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--opensource-color);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .project-card .status {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: rgba(43, 108, 208, 0.15);
+            color: var(--opensource-color);
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-dark);
+        }
+
+        .project-card .project-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+        }
+
+        .project-card .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .project-card .tech-stack span {
+            background: var(--bg-light);
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .project-card .project-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .project-card .project-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .project-card .repo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--opensource-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .project-card .repo-link:hover { color: #1a4a9e; }
+
+        .coming-soon {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* 返回按钮 */
+        .back-section {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 0.7rem 2rem;
+            background: var(--primary);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1rem; }
+            .page-hero { padding: 6rem 1.5rem 3rem; }
+            .page-hero h1 { font-size: 1.8rem; }
+            .container { padding: 2rem 1rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="../index.html" class="logo">木白</a>
+        <a href="../index.html" class="back-btn">← 返回首页</a>
+    </nav>
+
+    <!-- Hero -->
+    <header class="page-hero">
+        <h1>🔧 开源项目</h1>
+        <p>探索硬件与AI的边界，用开源精神连接创客社区。这里收录了我的开源硬件项目，欢迎参与和交流。</p>
+    </header>
+
+    <!-- 项目列表 -->
+    <div class="container">
+        <h2 class="section-title">项目列表</h2>
+        <p class="section-subtitle">共 3 个开源项目，持续更新中</p>
+
+        <div class="projects-grid">
+
+            <!-- AI 桌宠机械狗 -->
+            <div class="project-card">
+                <span class="status">📖 开源</span>
+                <h3>AI 桌宠机械狗</h3>
+                <p class="project-desc">搭载 AI 能力的桌面级机械狗，支持语音交互、情绪识别与智能跟随，让你的桌面伙伴更有灵魂。结合大模型 API 实现自然对话，通过传感器感知环境，具备自适应学习能力。</p>
+                <div class="tech-stack">
+                    <span>Arduino</span>
+                    <span>Python</span>
+                    <span>AI/LLM</span>
+                    <span>语音识别</span>
+                </div>
+                <div class="project-meta">
+                    <span>🎯 难度：★★★★☆</span>
+                    <span>📅 状态：开发中</span>
+                </div>
+                <div class="repo-link">
+                    🔗 仓库地址待补充
+                    <!-- 补充后替换为：<a href="仓库URL" class="repo-link">查看仓库 →</a> -->
+                </div>
+            </div>
+
+            <!-- 普通桌宠机械狗 -->
+            <div class="project-card">
+                <span class="status">📖 开源</span>
+                <h3>普通桌宠机械狗</h3>
+                <p class="project-desc">入门级桌面机械狗，基于开源硬件平台打造，支持基础行走、姿态切换与遥控操作。结构简单、易于组装，适合初学者学习机器人基础原理和 DIY 实践。</p>
+                <div class="tech-stack">
+                    <span>Arduino</span>
+                    <span>C++</span>
+                    <span>舵机控制</span>
+                    <span>3D打印</span>
+                </div>
+                <div class="project-meta">
+                    <span>🎯 难度：★★☆☆☆</span>
+                    <span>📅 状态：开发中</span>
+                </div>
+                <div class="repo-link">
+                    🔗 仓库地址待补充
+                </div>
+            </div>
+
+            <!-- 遥控机械手 -->
+            <div class="project-card">
+                <span class="status">📖 开源</span>
+                <h3>遥控机械手</h3>
+                <p class="project-desc">多自由度遥控机械手，支持手机/手柄远程操控，可编程动作序列。适用于 STEAM 教育、创客实践及自动化演示场景，支持自定义动作录制与回放。</p>
+                <div class="tech-stack">
+                    <span>ESP32</span>
+                    <span>Python</span>
+                    <span>蓝牙/WiFi</span>
+                    <span>3D打印</span>
+                </div>
+                <div class="project-meta">
+                    <span>🎯 难度：★★★☆☆</span>
+                    <span>📅 状态：开发中</span>
+                </div>
+                <div class="repo-link">
+                    🔗 仓库地址待补充
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 返回首页 -->
+        <div class="back-section">
+            <a href="../index.html" class="back-link">← 返回首页</a>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 木白 · 开源精神，分享创造</p>
+    </footer>
+
+</body>
+</html>

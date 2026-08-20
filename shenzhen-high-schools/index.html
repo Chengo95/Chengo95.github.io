@@ -270,7 +270,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 13.5px;
-    min-width: 1400px;
+    min-width: 900px;
   }
 
   thead {
@@ -661,7 +661,7 @@
   <div class="container">
     <div style="position:absolute;top:20px;left:20px;">
       <a href="../index.html" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:14px;display:inline-flex;align-items:center;gap:6px;">
-        <span style="font-size:18px;">&larr;</span> 返回首页
+        <span style="font-size:18px;">←</span> 返回首页
       </a>
     </div>
     <h1>2026年深圳高中中考信息整理</h1>
@@ -745,21 +745,13 @@
         <thead>
           <tr>
             <th style="width:44px">序号</th>
-            <th class="sortable" style="width:200px" onclick="sortTable('name')">学校名称 <span class="sort-icon">↕</span></th>
+            <th class="sortable" style="width:150px" onclick="sortTable('name')">学校名称 <span class="sort-icon">↕</span></th>
             <th class="sortable" style="width:90px" onclick="sortTable('district')">区域 <span class="sort-icon">↕</span></th>
             <th class="sortable num-col" style="width:90px" onclick="sortTable('acZs')">AC类住宿分 <span class="sort-icon">↕</span></th>
             <th class="sortable num-col" style="width:90px" onclick="sortTable('acZd')">AC类走读分 <span class="sort-icon">↕</span></th>
             <th class="sortable num-col" style="width:90px" onclick="sortTable('dZs')">D类住宿分 <span class="sort-icon">↕</span></th>
             <th class="sortable num-col" style="width:90px" onclick="sortTable('dZd')">D类走读分 <span class="sort-icon">↕</span></th>
-            <th style="min-width:180px">地址</th>
-            <th style="width:140px">住宿</th>
-            <th class="sortable" style="width:80px" onclick="sortTable('founded')">创校 <span class="sort-icon">↕</span></th>
-            <th style="width:120px">AC类指标生控制线</th>
-            <th style="width:120px">D类指标生控制线</th>
-            <th style="min-width:160px">多元化课程</th>
-            <th style="min-width:180px">师资</th>
-            <th style="min-width:160px">班型</th>
-            <th style="width:80px">校园图片</th>
+            <th style="min-width:200px">地址</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -991,13 +983,10 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.dataset.index = realIndex;
 
-    const hasDetail = school.teachers !== '未找到' || school.courses !== '未找到' ||
-                      school.classType !== '未找到' || school.dormitory !== '未找到';
-
     tr.innerHTML =
       '<td class="idx-col">' + (idx + 1) + '</td>' +
       '<td class="name-col">' +
-        (hasDetail ? '<span class="expand-icon" onclick="toggleRow(' + realIndex + ', event)">&#9654;</span>' : '') +
+        '<span class="expand-icon" onclick="toggleRow(' + realIndex + ', event)">&#9654;</span>' +
         escapeHtml(school.name) +
       '</td>' +
       '<td><span class="district-tag">' + escapeHtml(school.district) + '</span></td>' +
@@ -1005,17 +994,7 @@ function renderTable() {
       getScoreCell(school.acZd) +
       getScoreCell(school.dZs) +
       getScoreCell(school.dZd) +
-      '<td>' + escapeHtml(school.address) + '</td>' +
-      '<td>' + escapeHtml(school.dormitory) + '</td>' +
-      '<td>' + escapeHtml(school.founded) + '</td>' +
-      '<td>' + escapeHtml(school.acCtrl) + '</td>' +
-      '<td>' + escapeHtml(school.dCtrl) + '</td>' +
-      '<td>' + escapeHtml(school.courses) + '</td>' +
-      '<td>' + escapeHtml(school.teachers) + '</td>' +
-      '<td>' + escapeHtml(school.classType) + '</td>' +
-      '<td>' + (school.imgUrl ?
-        '<span class="img-link" onclick="openModal(\'' + escapeHtml(school.imgUrl) + '\', \'' + escapeHtml(school.name) + '\')">查看图片</span>' :
-        '<span class="img-link no-img">无</span>') + '</td>';
+      '<td>' + escapeHtml(school.address) + '</td>';
 
     tbody.appendChild(tr);
 
@@ -1025,16 +1004,20 @@ function renderTable() {
     detailTr.id = 'detail-' + realIndex;
     detailTr.style.display = 'none';
 
-    const colCount = 16;
+    const colCount = 8;
     detailTr.innerHTML = '<td colspan="' + colCount + '"><div class="detail-content"><div class="detail-grid">' +
-      detailItem('师资', school.teachers) +
-      detailItem('多元化课程', school.courses) +
-      detailItem('班型', school.classType) +
       detailItem('住宿', school.dormitory) +
-      detailItem('地址', school.address) +
       detailItem('创校时间', school.founded) +
       detailItem('AC类指标生控制线', school.acCtrl) +
       detailItem('D类指标生控制线', school.dCtrl) +
+      detailItem('多元化课程', school.courses) +
+      detailItem('师资', school.teachers) +
+      detailItem('班型', school.classType) +
+      '<div class="detail-item"><div class="detail-label">校园图片</div><div class="detail-value">' +
+        (school.imgUrl ?
+          '<span class="img-link" onclick="openModal(\'' + escapeHtml(school.imgUrl) + '\', \'' + escapeHtml(school.name) + '\')">查看图片</span>' :
+          '无') +
+        '</div></div>' +
     '</div></div></td>';
 
     tbody.appendChild(detailTr);

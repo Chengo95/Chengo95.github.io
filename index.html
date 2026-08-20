@@ -1222,13 +1222,14 @@
             }
             countSpan.textContent = count;
 
-            // 更新到云端
+            // 通过安全函数更新点赞（不直接修改数据）
             if (supabaseReady) {
                 try {
-                    await supabaseClient
-                        .from('comments')
-                        .update({ likes: count })
-                        .eq('id', commentId);
+                    if (btn.classList.contains('liked')) {
+                        await supabaseClient.rpc('increment_like', { comment_id: commentId });
+                    } else {
+                        await supabaseClient.rpc('decrement_like', { comment_id: commentId });
+                    }
                 } catch (err) {
                     console.error('点赞更新失败:', err);
                 }

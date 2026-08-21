@@ -53,7 +53,7 @@
         }
 
         /* 导航栏 */
-        nav {
+        nav:not(.page-toc) {
             position: sticky;
             top: 0;
             width: 100%;
@@ -271,6 +271,7 @@
 
         /* ========== 左侧目录导航 ========== */
         .page-toc {
+            display: block;
             position: fixed;
             left: 0;
             top: 0;
@@ -295,6 +296,7 @@
             font-weight: 600;
         }
         .page-toc ul {
+            display: block;
             list-style: none;
             padding: 0;
             margin: 0;

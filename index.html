@@ -934,19 +934,197 @@
                 height: 40px;
             }
         }
+
+        /* ========== 瀛愭ā鍧楃綉鏍?========== */
+        .subsection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .subsection-grid .featured-schools,
+        .subsection-grid .featured-competitions {
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .subsection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== 瀛愭ā鍧楃綉鏍?========== */
+        .subsection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .subsection-grid .featured-schools,
+        .subsection-grid .featured-competitions {
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .subsection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== 左侧目录导航 ========== */
+        .page-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 20px 16px;
+            z-index: 200;
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+        .page-toc .toc-header {
+            font-size: 13px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+        }
+        .page-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .page-toc li {
+            margin-bottom: 2px;
+        }
+        .page-toc a {
+            display: block;
+            padding: 8px 12px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+        .page-toc a:hover {
+            background: #e8eaf0;
+            color: #1a365d;
+        }
+        .page-toc a.active {
+            background: #1a365d;
+            color: #fff;
+        }
+        .toc-toggle {
+            display: none;
+            position: fixed;
+            left: 16px;
+            bottom: 80px;
+            z-index: 201;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #1a365d;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        .toc-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 199;
+        }
+        @media (min-width: 1025px) {
+            body.toc-enabled {
+                padding-left: 240px;
+            }
+        }
+        @media (max-width: 1024px) {
+            .page-toc {
+                transform: translateX(-100%);
+                box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+            }
+            .page-toc.open {
+                transform: translateX(0);
+            }
+            .toc-toggle {
+                display: flex;
+            }
+            .toc-overlay.show {
+                display: block;
+            }
+        }
+
+
+        .page-toc .toc-home {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            color: #1a365d;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            background: #e8eaf0;
+            transition: all 0.2s;
+        }
+        .page-toc .toc-home:hover {
+            background: #1a365d;
+            color: #fff;
+        }
+
+
+        /* 导航栏与侧边栏适配 */
+        @media (min-width: 1025px) {
+            nav {
+                left: 240px;
+                width: calc(100% - 240px);
+            }
+            .page-toc {
+                padding-top: 80px;
+            }
+        }
+
     </style>
 </head>
-<body>
+<body class="toc-enabled">
+    <!-- 左侧目录 -->
+    <nav class="page-toc">
+        <div class="toc-header">目录导航</div>
+        <a class="toc-home" href="#top">↑ 回到顶部</a>
+        <ul>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#shenzhen-zhongkao">深圳中考</a></li>
+                <li><a href="#competitions">白名单赛事</a></li>
+                <li><a href="#projects">项目想法</a></li>
+                <li><a href="#platforms">找到我</a></li>
+                <li><a href="#contact">给我留言</a></li>
+        </ul>
+    </nav>
+    <button class="toc-toggle" aria-label="目录">☰</button>
+    <div class="toc-overlay"></div>
+
 
     <!-- 导航栏 -->
     <nav>
         <div class="logo">木白</div>
         <ul id="navMenu">
             <li><a href="#about">关于我</a></li>
-            <li><a href="#schools">深圳高中</a></li>
-            <li><a href="#competitions">赛事指南</a></li>
-            <li><a href="#platforms">平台</a></li>
+            <li><a href="#shenzhen-zhongkao">深圳中考</a></li>
+            <li><a href="#competitions">白名单赛事</a></li>
             <li><a href="#projects">项目想法</a></li>
+            <li><a href="#platforms">找到我</a></li>
             <li><a href="#contact">留言</a></li>
         </ul>
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
@@ -980,40 +1158,36 @@
     </section>
 
 
-    <!-- 深圳高中信息 -->
-    <section id="schools">
-        <h2 class="section-title">深圳高中信息</h2>
-        <p class="section-subtitle">2026年深圳中考数据全览</p>
-        <a href="shenzhen-high-schools/index.html" class="featured-schools">
-            <span class="featured-badge">2026年最新数据</span>
-            <h3>2026年深圳高中中考信息整理</h3>
-            <p>覆盖深圳全部100所高中，包含录取分数线、指标生控制线、学校地址、住宿情况、师资力量、班型设置、多元化课程及校园实景图片，支持搜索、筛选、排序。</p>
-            <div class="featured-stats">
-                <div class="stat-item"><span>学校</span><span>100所</span></div>
-                <div class="stat-item"><span>区域</span><span>12个区</span></div>
-                <div class="stat-item"><span>数据</span><span>录取分数线</span></div>
-                <div class="stat-item"><span>图片</span><span>校园实景</span></div>
-            </div>
-            <span class="featured-arrow">→</span>
-        </a>
-    </section>
-
-    <!-- 中考志愿填报指南 -->
-    <section id="zhongkao-guide">
-        <h2 class="section-title">中考志愿填报</h2>
-        <p class="section-subtitle">2026年深圳中考志愿填报全攻略</p>
-        <a href="articles/shenzhen-zhongkao-zhiyuan-guide.html" class="featured-competitions">
-            <span class="featured-badge">2026年最新</span>
-            <h3>2026 深圳中考志愿填报指南</h3>
-            <p>涵盖志愿批次、录取规则、名额分配、走读调剂等核心政策，18问18答详解填报流程，含志愿草表 Excel 领取，帮助考生和家长科学合理填报志愿。</p>
-            <div class="featured-stats">
-                <div class="stat-item"><span>批次</span><span>5个批次</span></div>
-                <div class="stat-item"><span>问答</span><span>18问18答</span></div>
-                <div class="stat-item"><span>规则</span><span>分数优先</span></div>
-                <div class="stat-item"><span>资料</span><span>Excel表</span></div>
-            </div>
-            <span class="featured-arrow">→</span>
-        </a>
+    <!-- 深圳中考 -->
+    <section id="shenzhen-zhongkao">
+        <h2 class="section-title">深圳中考</h2>
+        <p class="section-subtitle">2026年深圳中考数据与志愿填报全攻略</p>
+        <div class="subsection-grid">
+            <a href="shenzhen-high-schools/index.html" class="featured-schools">
+                <span class="featured-badge">2026年最新数据</span>
+                <h3>深圳高中信息</h3>
+                <p>覆盖深圳全部100所高中，包含录取分数线、指标生控制线、学校地址、住宿情况、师资力量、班型设置、多元化课程及校园实景图片，支持搜索、筛选、排序。</p>
+                <div class="featured-stats">
+                    <div class="stat-item"><span>学校</span><span>100所</span></div>
+                    <div class="stat-item"><span>区域</span><span>12个区</span></div>
+                    <div class="stat-item"><span>数据</span><span>录取分数线</span></div>
+                    <div class="stat-item"><span>图片</span><span>校园实景</span></div>
+                </div>
+                <span class="featured-arrow">→</span>
+            </a>
+            <a href="articles/shenzhen-zhongkao-zhiyuan-guide.html" class="featured-competitions">
+                <span class="featured-badge">2026年最新</span>
+                <h3>中考志愿填报</h3>
+                <p>涵盖志愿批次、录取规则、名额分配、走读调剂等核心政策，18问18答详解填报流程，含志愿草表 Excel 领取，帮助考生和家长科学合理填报志愿。</p>
+                <div class="featured-stats">
+                    <div class="stat-item"><span>批次</span><span>5个批次</span></div>
+                    <div class="stat-item"><span>问答</span><span>18问18答</span></div>
+                    <div class="stat-item"><span>规则</span><span>分数优先</span></div>
+                    <div class="stat-item"><span>资料</span><span>Excel表</span></div>
+                </div>
+                <span class="featured-arrow">→</span>
+            </a>
+        </div>
     </section>
 
     <!-- 白名单赛事 -->
@@ -1032,29 +1206,6 @@
             </div>
             <span class="featured-arrow">→</span>
         </a>
-    </section>
-
-    <!-- 平台链接 -->
-    <section id="platforms">
-        <h2 class="section-title">找到我</h2>
-        <p class="section-subtitle">在以下平台可以关注或联系我</p>
-        <div class="platforms-grid">
-            <a href="https://www.douyin.com/user/self?from_tab_name=main&amp;showSubTab=video&amp;showTab=post" target="_blank" class="platform-card">
-                <div class="icon">🎵</div>
-                <div class="name">抖音</div>
-                <div class="desc">抖音号：CB100</div>
-            </a>
-            <a href="mailto:810559308@qq.com" class="platform-card">
-                <div class="icon">📧</div>
-                <div class="name">邮箱</div>
-                <div class="desc">810559308@qq.com</div>
-            </a>
-            <a href="#wechat-modal" class="platform-card" onclick="document.getElementById('wechat-modal').style.display='flex'">
-                <div class="icon">💬</div>
-                <div class="name">微信</div>
-                <div class="desc">微信号：WDSW10086</div>
-            </a>
-        </div>
     </section>
 
     <!-- 项目想法 -->
@@ -1081,6 +1232,29 @@
                 <span class="status status-open">📖 开源</span>
                 <h3>开源项目</h3>
                 <p>AI 桌宠机械狗、普通桌宠机械狗、遥控机械手等开源硬件项目，点击查看详情。</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- 找到我 -->
+    <section id="platforms">
+        <h2 class="section-title">找到我</h2>
+        <p class="section-subtitle">在以下平台可以关注或联系我</p>
+        <div class="platforms-grid">
+            <a href="https://www.douyin.com/user/self?from_tab_name=main&amp;showSubTab=video&amp;showTab=post" target="_blank" class="platform-card">
+                <div class="icon">🎵</div>
+                <div class="name">抖音</div>
+                <div class="desc">抖音号：CB100</div>
+            </a>
+            <a href="mailto:810559308@qq.com" class="platform-card">
+                <div class="icon">📧</div>
+                <div class="name">邮箱</div>
+                <div class="desc">810559308@qq.com</div>
+            </a>
+            <a href="#wechat-modal" class="platform-card" onclick="document.getElementById('wechat-modal').style.display='flex'">
+                <div class="icon">💬</div>
+                <div class="name">微信</div>
+                <div class="desc">微信号：WDSW10086</div>
             </a>
         </div>
     </section>
@@ -1346,5 +1520,60 @@
             <p>微信号：WDSW10086</p>
         </div>
     </div>
+
+
+<script>
+// 左侧目录导航
+(function() {
+    var tocLinks = document.querySelectorAll('.page-toc a');
+    var sections = [];
+    tocLinks.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            var target = document.getElementById(href.substring(1));
+            if (target) sections.push({ el: target, link: link });
+        }
+    });
+
+    // Scroll spy
+    function updateActive() {
+        var scrollPos = window.scrollY + 100;
+        var current = null;
+        sections.forEach(function(s) {
+            if (s.el.offsetTop <= scrollPos) current = s;
+        });
+        tocLinks.forEach(function(l) { l.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+
+    // Mobile toggle
+    var toggle = document.querySelector('.toc-toggle');
+    var toc = document.querySelector('.page-toc');
+    var overlay = document.querySelector('.toc-overlay');
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            toc.classList.toggle('open');
+            overlay.classList.toggle('show');
+        });
+    }
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            toc.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+    }
+    // Close on link click (mobile)
+    tocLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                toc.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+        });
+    });
+})();
+</script>
 
 </body></html>

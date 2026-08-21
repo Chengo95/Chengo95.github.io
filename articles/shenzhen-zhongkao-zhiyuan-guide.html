@@ -105,17 +105,17 @@
         }
         /* 引流钩子 */
         .lead-hook {
-            margin: 3rem 0 2rem; padding: 2.5rem 2rem; background: linear-gradient(135deg,#1a365d,#2c5282);
-            border-radius: var(--border-radius); color: var(--text-light); text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,.12);
+            max-width:680px; margin:36px auto; padding:28px; background: linear-gradient(135deg,#1a365d,#2c5282);
+            border-radius:16px; color:#fff; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.12);
         }
-        .lead-hook h3 { color: var(--text-light); font-size: 1.25rem; margin-bottom: 0.5rem; }
-        .lead-hook .lead-sub { color: rgba(255,255,255,0.92); font-size: 0.8125rem; margin-bottom: 1rem; }
+        .lead-hook h3 { color:#fff; font-size:20px; font-weight:700; margin-bottom:6px; }
+        .lead-hook .lead-sub { color:rgba(255,255,255,0.92); font-size:13px; margin-bottom:16px; }
         .lead-hook .qr-card {
-            width: 160px; margin: 0 auto 1rem;
+            width:132px; margin:0 auto 10px;
         }
-        .lead-hook .qr-card img { width: 160px; height: 160px; border-radius: 12px; display: block; margin: 0 auto; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-        .lead-hook .wx-instruction { color: rgba(255,255,255,0.9); font-size: 0.9rem; line-height: 1.6; }
-        .lead-hook .wx-instruction .highlight { color: var(--accent); font-weight: 600; }
+        .lead-hook .qr-card img { width:132px; height:132px; border-radius:12px; background:#fff; object-fit:cover; display:block; margin:0 auto; }
+        .lead-hook .wx-instruction { color:rgba(255,255,255,0.9); font-size:14px; line-height:1.6; }
+        .lead-hook .wx-instruction .highlight { color:#fff; font-weight:700; }
         .back-home { display: inline-block; margin-top: 2rem; color: var(--primary); text-decoration: none; font-weight: 500; }
         .back-home:hover { text-decoration: underline; }
         @media (max-width: 768px) {
@@ -124,9 +124,147 @@
             .article-body table { font-size: 0.82rem; }
             .article-body th, .article-body td { padding: 0.5rem 0.4rem; }
         }
+
+        /* ========== 左侧目录导航 ========== */
+        .page-toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 20px 16px;
+            z-index: 200;
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+        .page-toc .toc-header {
+            font-size: 13px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+        }
+        .page-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .page-toc li {
+            margin-bottom: 2px;
+        }
+        .page-toc a {
+            display: block;
+            padding: 8px 12px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+        .page-toc a:hover {
+            background: #e8eaf0;
+            color: #1a365d;
+        }
+        .page-toc a.active {
+            background: #1a365d;
+            color: #fff;
+        }
+        .toc-toggle {
+            display: none;
+            position: fixed;
+            left: 16px;
+            bottom: 80px;
+            z-index: 201;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #1a365d;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        .toc-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 199;
+        }
+        @media (min-width: 1025px) {
+            body.toc-enabled {
+                padding-left: 240px;
+            }
+        }
+        @media (max-width: 1024px) {
+            .page-toc {
+                transform: translateX(-100%);
+                box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+            }
+            .page-toc.open {
+                transform: translateX(0);
+            }
+            .toc-toggle {
+                display: flex;
+            }
+            .toc-overlay.show {
+                display: block;
+            }
+        }
+
+
+        .page-toc .toc-home {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            color: #1a365d;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            background: #e8eaf0;
+            transition: all 0.2s;
+        }
+        .page-toc .toc-home:hover {
+            background: #1a365d;
+            color: #fff;
+        }
+
+
+        /* 侧边栏顶部适配 */
+        @media (min-width: 1025px) {
+            .page-toc {
+                padding-top: 24px;
+            }
+        }
+
     </style>
 </head>
-<body>
+<body class="toc-enabled">
+    <!-- 左侧目录 -->
+    <nav class="page-toc">
+        <div class="toc-header">文章目录</div>
+        <a class="toc-home" href="../index.html">← 返回首页</a>
+        <ul>
+                <li><a href="#sec-1">一、先看懂分数线</a></li>
+                <li><a href="#sec-2">二、冲稳保三段策略</a></li>
+                <li><a href="#sec-3">三、3个最容易踩的坑</a></li>
+                <li><a href="#sec-4">四、用工具排志愿</a></li>
+        </ul>
+    </nav>
+    <button class="toc-toggle" aria-label="目录">☰</button>
+    <div class="toc-overlay"></div>
+
     <nav>
         <a href="/" class="logo">木白</a>
         <ul>
@@ -155,7 +293,7 @@
         <div class="article-body">
             <p>深圳中考志愿填报，是家长在分数之外最揪心的一环——填高了怕滑档，填低了心不甘。这篇文章用<strong>深圳 100 所高中真实录取分数线</strong>作底子，把 AC 类、D 类、名额分配的区别讲透，再给你一套"冲刺—稳妥—保底"三段填报策略。看完你能自己排出一张靠谱的志愿表。</p>
 
-            <h2>一、先看懂分数线：AC 类、D 类、名额分配是什么</h2>
+            <h2 id="sec-1">一、先看懂分数线：AC 类、D 类、名额分配是什么</h2>
             <p>深圳中考录取线不是一条，而是按考生户籍类型分了 <strong>A、C、D 三类</strong>，再加上<strong>名额分配（原"指标生"）</strong>这条单独通道。看不懂这个，分数线就是一堆数字。</p>
             <ul>
                 <li><strong>A 类</strong>：深圳户籍考生（本市户口）。</li>
@@ -184,7 +322,7 @@
             </table>
             <div class="note">提示：分数线每年随试题难度和招生计划波动，填报时以教育主管部门当年公布数据为准，本文数据仅供参考。</div>
 
-            <h2>二、志愿填报的"冲稳保"三段策略</h2>
+            <h2 id="sec-2">二、志愿填报的"冲稳保"三段策略</h2>
             <p>深圳中考可填的志愿有多个批次、每批多个志愿。核心思路是<strong>把志愿分成三段</strong>，用梯度对冲滑档风险：</p>
             <h3>1. 冲刺段（1—2 个志愿）</h3>
             <p>选比自己估分高 <strong>3—8 分</strong>的学校，搏一搏。名额分配志愿尤其值得放在这里——名额分配录取控制线往往比正取线低几分，是"低分冲名校"的关键机会，别浪费。</p>
@@ -193,14 +331,14 @@
             <h3>3. 保底段（1—2 个志愿）</h3>
             <p>选比自己估分低 <strong>10 分以上</strong>的学校，确保最坏情况下也有学上。<strong>保底志愿一定要填，而且要够低</strong>。每年都有家长嫌保底学校差不肯填，结果冲刺全滑、直接掉到批末，比原本能去的学校还差。</p>
 
-            <h2>三、3 个最容易踩的坑</h2>
+            <h2 id="sec-3">三、3 个最容易踩的坑</h2>
             <ol>
                 <li><strong>只看正取线，漏看名额分配线</strong>。名额分配是降分通道，不看名额分配线等于把机会拱手让人。</li>
                 <li><strong>志愿之间没拉开梯度</strong>。所有志愿全挤在同一分数段，等于只填了 1 个志愿，一个滑档全线崩盘。相邻志愿建议拉开 5—8 分。</li>
                 <li><strong>D 类考生照搬 AC 类分数线</strong>。D 类通常比 AC 高，照抄会高估自己、填得过高。务必看 D 类那一列。</li>
             </ol>
 
-            <h2>四、别算糊涂账：用工具排志愿</h2>
+            <h2 id="sec-4">四、别算糊涂账：用工具排志愿</h2>
             <p>把估分、100 所学校的分数线、志愿梯度一起算，手动算很容易出错。我做了一份<strong>《2026 深圳中考志愿填报 Excel 表》</strong>：内置 100 所高中完整分数线，还有一张"志愿草表"，填进你的估分后，<strong>"分差"列自动算出你的分和参考线的差值</strong>，冲刺/稳妥/保底一目了然。</p>
 
             <div class="lead-hook">
@@ -217,5 +355,60 @@
             <a href="/shenzhen-high-schools/" class="back-home">← 返回深圳高中信息，查看 100 所学校完整数据</a>
         </div>
     </main>
+
+<script>
+// 左侧目录导航
+(function() {
+    var tocLinks = document.querySelectorAll('.page-toc a');
+    var sections = [];
+    tocLinks.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            var target = document.getElementById(href.substring(1));
+            if (target) sections.push({ el: target, link: link });
+        }
+    });
+
+    // Scroll spy
+    function updateActive() {
+        var scrollPos = window.scrollY + 100;
+        var current = null;
+        sections.forEach(function(s) {
+            if (s.el.offsetTop <= scrollPos) current = s;
+        });
+        tocLinks.forEach(function(l) { l.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+
+    // Mobile toggle
+    var toggle = document.querySelector('.toc-toggle');
+    var toc = document.querySelector('.page-toc');
+    var overlay = document.querySelector('.toc-overlay');
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            toc.classList.toggle('open');
+            overlay.classList.toggle('show');
+        });
+    }
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            toc.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+    }
+    // Close on link click (mobile)
+    tocLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                toc.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+        });
+    });
+})();
+</script>
+
 </body>
 </html>

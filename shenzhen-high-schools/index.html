@@ -673,7 +673,21 @@
   }
 </style>
 </head>
-<body>
+<body class="toc-enabled">
+    <!-- 左侧目录 -->
+    <nav class="page-toc">
+        <div class="toc-header">页面目录</div>
+        <a class="toc-home" href="../index.html">← 返回首页</a>
+        <ul>
+                <li><a href="#data-intro">数据说明</a></li>
+                <li><a href="#school-data">学校数据</a></li>
+                <li><a href="#campus-photos">校园实景图片</a></li>
+                <li><a href="#data-sources">数据来源</a></li>
+        </ul>
+    </nav>
+    <button class="toc-toggle" aria-label="目录">☰</button>
+    <div class="toc-overlay"></div>
+
 
 <!-- 顶部标题区 -->
 <header class="header">
@@ -705,7 +719,7 @@
 <div class="container">
 
   <!-- 数据说明区 -->
-  <section class="section">
+  <section id="data-intro" class="section">
     <h2 class="section-title">数据说明</h2>
     <p class="section-desc">请阅读以下重要说明，了解各项数据的含义与局限性</p>
     <div class="note-cards">
@@ -745,7 +759,7 @@
   </section>
 
   <!-- 学校数据表格区 -->
-  <section class="section">
+  <section id="school-data" class="section">
     <h2 class="section-title">学校数据</h2>
     <p class="section-desc">点击表头排序，点击行展开详情，高分数（&gt;570）以黄色背景突出</p>
 
@@ -759,7 +773,7 @@
       <div class="result-count">共 <strong id="resultCount">0</strong> 所学校</div>
     </div>
 
-    <div class="table-wrapper">
+    <div class="table-wrapper collapsible" id="schoolTableWrapper">
       <table id="schoolTable">
         <thead>
           <tr>
@@ -777,18 +791,21 @@
       </table>
     </div>
     <div id="noResult" class="no-result" style="display:none;">未找到匹配的学校，请调整搜索条件</div>
+        <button id="tableToggleBtn" class="collapsible-toggle" onclick="toggleCollapsible(this, 'schoolTableWrapper')">点击显示全部 ▼</button>
   </section>
 
   <!-- 校园实景图片展示区 -->
-  <section class="section">
+  <section id="campus-photos" class="section">
     <h2 class="section-title">校园实景图片</h2>
     <p class="section-desc">展示有图片URL的学校校园图片，图片来自深圳招考网</p>
-    <div class="image-gallery" id="imageGallery"></div>
+    <div class="image-gallery collapsible" id="imageGallery"></div>
+        <button id="galleryToggleBtn" class="collapsible-toggle" onclick="toggleCollapsible(this, 'imageGallery')">点击显示全部 ▼</button>
   </section>
 
   <!-- 数据来源区 -->
-  <section class="section">
+  <section id="data-sources" class="section">
     <h2 class="section-title">数据来源</h2>
+        <div class="collapsible-content" id="dataSourcesWrapper">
     <p class="section-desc">本报告数据来自以下公开渠道</p>
     <ol class="source-list">
       <li>
@@ -816,7 +833,10 @@
         </div>
       </li>
     </ol>
-  </section>
+  
+        </div>
+        <button id="dsToggleBtn" class="collapsible-toggle" onclick="toggleCollapsible(this, 'dataSourcesWrapper')">点击显示全部 ▼</button>
+    </section>
 
 </div>
 
@@ -1199,5 +1219,88 @@ renderTable();
 renderGallery();
 </script>
 
+
+
+<script>
+// 左侧目录导航
+(function() {
+    var tocLinks = document.querySelectorAll('.page-toc a');
+    var sections = [];
+    tocLinks.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            var target = document.getElementById(href.substring(1));
+            if (target) sections.push({ el: target, link: link });
+        }
+    });
+
+    // Scroll spy
+    function updateActive() {
+        var scrollPos = window.scrollY + 100;
+        var current = null;
+        sections.forEach(function(s) {
+            if (s.el.offsetTop <= scrollPos) current = s;
+        });
+        tocLinks.forEach(function(l) { l.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+
+    // Mobile toggle
+    var toggle = document.querySelector('.toc-toggle');
+    var toc = document.querySelector('.page-toc');
+    var overlay = document.querySelector('.toc-overlay');
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            toc.classList.toggle('open');
+            overlay.classList.toggle('show');
+        });
+    }
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            toc.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+    }
+    // Close on link click (mobile)
+    tocLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                toc.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+        });
+    });
+})();
+</script>
+
+
+<script>
+// 折叠展开功能
+function toggleCollapsible(btn, targetId) {
+    var target = document.getElementById(targetId);
+    if (!target) return;
+    if (target.classList.contains('show-all') || target.classList.contains('expanded')) {
+        target.classList.remove('show-all');
+        target.classList.remove('expanded');
+        btn.textContent = '点击显示全部 ▼';
+    } else {
+        target.classList.add('show-all');
+        target.classList.add('expanded');
+        btn.textContent = '收起 ▲';
+    }
+}
+// 检查是否需要显示按钮（内容不够多则隐藏）
+function checkToggleNeeded(contentId, btnId, minCount) {
+    var content = document.getElementById(contentId);
+    var btn = document.getElementById(btnId);
+    if (!content || !btn) return;
+    var items = content.querySelectorAll('tr, .gallery-item, .source-card, .competition-card, .card');
+    if (items.length <= minCount) {
+        btn.style.display = 'none';
+    }
+}
+</script>
 
 </body></html>

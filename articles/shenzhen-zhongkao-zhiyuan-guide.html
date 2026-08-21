@@ -247,6 +247,14 @@
                 padding-top: 24px;
             }
         }
+    
+        /* 侧边栏适配：顶部导航栏偏移 */
+        @media (min-width: 1025px) {
+            nav:not(.page-toc) {
+                left: 240px;
+                width: calc(100% - 240px);
+            }
+        }
 
     </style>
 </head>

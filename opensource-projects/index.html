@@ -54,13 +54,13 @@
 
         /* 导航栏 */
         nav {
-            position: fixed;
+            position: sticky;
             top: 0;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            z-index: 1000;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -391,15 +391,6 @@
                 padding-top: 24px;
             }
         }
-    
-        /* 侧边栏适配：顶部导航栏偏移 */
-        @media (min-width: 1025px) {
-            nav:not(.page-toc) {
-                left: 240px;
-                width: calc(100% - 240px);
-            }
-        }
-
     </style>
 </head>
 <body class="toc-enabled">

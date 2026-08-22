@@ -2,8 +2,8 @@
 <html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="baidu-site-verification" content="codeva-zYqrWuPNi6" />
-    <meta name="google-site-verification" content="A9WaFFEpOrdp64FClz0xmYZwFcOgLW5Zsul8ppPbskk" />
+    <meta name="baidu-site-verification" content="codeva-zYqrWuPNi6">
+    <meta name="google-site-verification" content="A9WaFFEpOrdp64FClz0xmYZwFcOgLW5Zsul8ppPbskk">
     <title>2026 深圳中考志愿填报指南：分数线解读 + 冲稳保策略 - 木白</title>
     <meta name="description" content="2026 深圳中考志愿怎么填？本文用 100 所高中真实录取分数线，讲透 AC类、D类、名额分配区别，给出冲刺-稳妥-保底三段填报策略，附可下载的志愿填报表。">
     <meta name="keywords" content="2026深圳中考,深圳中考志愿填报,深圳中考录取分数线,AC类,D类,名额分配,指标生">
@@ -82,6 +82,53 @@
         .article-header h1 { font-size: 2rem; line-height: 1.4; color: var(--bg-dark); margin-bottom: 0.8rem; }
         .article-meta { font-size: 0.85rem; color: var(--text-muted); }
         .article-meta span { margin-right: 1rem; }
+        /* 中考倒计时 */
+        .countdown-card {
+            margin-top: 1.5rem;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 16px rgba(26, 54, 93, 0.15);
+        }
+        .countdown-card .cd-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .countdown-card .cd-desc {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+        .countdown-card .cd-nums {
+            display: flex;
+            gap: 10px;
+        }
+        .countdown-card .cd-unit {
+            text-align: center;
+            min-width: 48px;
+        }
+        .countdown-card .cd-unit .num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        .countdown-card .cd-unit .label {
+            font-size: 0.72rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+        .countdown-card .cd-ended {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fbd38d;
+        }
         .article-body h2 {
             font-size: 1.4rem; color: var(--bg-dark); margin: 2.2rem 0 1rem;
             padding-left: 0.8rem; border-left: 4px solid var(--accent);
@@ -120,6 +167,9 @@
         .back-home:hover { text-decoration: underline; }
         @media (max-width: 768px) {
             .article-header h1 { font-size: 1.5rem; }
+            .countdown-card { flex-direction: column; align-items: stretch; padding: 1rem 1.2rem; }
+            .countdown-card .cd-nums { justify-content: center; }
+            .countdown-card .cd-unit .num { font-size: 1.4rem; }
             .article-body h2 { font-size: 1.2rem; }
             .article-body table { font-size: 0.82rem; }
             .article-body th, .article-body td { padding: 0.5rem 0.4rem; }
@@ -289,6 +339,18 @@
                 <span>更新：2026-08-21</span>
                 <span>阅读约 6 分钟</span>
             </div>
+            <div class="countdown-card" id="zhongkao-countdown">
+                <div>
+                    <div class="cd-title">中考倒计时</div>
+                    <div class="cd-desc">距 2027 年深圳中考还有</div>
+                </div>
+                <div class="cd-nums">
+                    <div class="cd-unit"><div class="num" id="cd-days">-</div><div class="label">天</div></div>
+                    <div class="cd-unit"><div class="num" id="cd-hours">-</div><div class="label">时</div></div>
+                    <div class="cd-unit"><div class="num" id="cd-minutes">-</div><div class="label">分</div></div>
+                    <div class="cd-unit"><div class="num" id="cd-seconds">-</div><div class="label">秒</div></div>
+                </div>
+            </div>
         </header>
 
         <div class="article-body">
@@ -411,5 +473,44 @@
 })();
 </script>
 
-</body>
-</html>
+<script>
+(function() {
+    var target = new Date('2027-06-28T09:00:00+08:00');
+    var elDays = document.getElementById('cd-days');
+    var elHours = document.getElementById('cd-hours');
+    var elMinutes = document.getElementById('cd-minutes');
+    var elSeconds = document.getElementById('cd-seconds');
+    var bar = document.getElementById('zhongkao-countdown');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function update() {
+        var now = new Date();
+        var diff = target - now;
+
+        if (diff <= 0) {
+            if (bar) {
+                bar.innerHTML = '<div class="cd-ended">2027年深圳中考已开始，祝各位考生金榜题名！</div>';
+            }
+            return;
+        }
+
+        var days = Math.floor(diff / 86400000);
+        var hours = Math.floor((diff % 86400000) / 3600000);
+        var minutes = Math.floor((diff % 3600000) / 60000);
+        var seconds = Math.floor((diff % 60000) / 1000);
+
+        if (elDays) elDays.textContent = days;
+        if (elHours) elHours.textContent = pad(hours);
+        if (elMinutes) elMinutes.textContent = pad(minutes);
+        if (elSeconds) elSeconds.textContent = pad(seconds);
+    }
+
+    update();
+    setInterval(update, 1000);
+})();
+</script>
+
+
+
+</body></html>

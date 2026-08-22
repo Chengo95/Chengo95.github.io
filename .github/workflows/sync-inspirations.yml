@@ -1,0 +1,43 @@
+name: 同步灵感打卡
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 获取灵感 Issues 并生成 JSON
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p data
+          gh issue list \
+            --label "inspiration" \
+            --state all \
+            --json number,title,body,labels,createdAt,state \
+            --limit 500 \
+            | jq '[.[] | {
+                number: .number,
+                title: .title,
+                content: .body,
+                tags: [.labels[].name | select(. != "inspiration")],
+                date: .createdAt,
+                state: .state
+              }]' \
+            > data/inspirations.json
+
+      - name: 提交更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/inspirations.json
+          git diff --staged --quiet || git commit -m "auto: sync inspirations"
+          git push

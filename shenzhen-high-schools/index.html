@@ -647,6 +647,67 @@
     text-align: left;
   }
 
+  /* ========== 中考倒计时 ========== */
+  .countdown-bar {
+    margin-top: 24px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .countdown-bar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: #fbd38d;
+  }
+  .countdown-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+  .countdown-label .cd-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .countdown-numbers {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .countdown-unit {
+    text-align: center;
+    min-width: 56px;
+  }
+  .countdown-unit .cd-num {
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-unit .cd-unit-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+  }
+  .countdown-ended {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fbd38d;
+  }
+
   /* ========== 响应式 ========== */
   @media (max-width: 768px) {
     .container { padding: 0 14px; }
@@ -655,6 +716,9 @@
     .stat-cards { grid-template-columns: 1fr; gap: 10px; }
     .stat-card { padding: 14px 16px; }
     .stat-card .stat-num { font-size: 22px; }
+    .countdown-bar { flex-direction: column; align-items: stretch; padding: 16px 18px; }
+    .countdown-numbers { justify-content: center; }
+    .countdown-unit .cd-num { font-size: 24px; }
     .section { padding: 24px 18px; margin-top: 20px; }
     .section-title { font-size: 18px; }
     .note-cards { grid-template-columns: 1fr; }
@@ -824,6 +888,18 @@
       <div class="stat-card">
         <div class="stat-num">2026.08</div>
         <div class="stat-label">数据截止</div>
+      </div>
+    </div>
+    <div class="countdown-bar" id="zhongkao-countdown">
+      <div class="countdown-label">
+        <div class="cd-title">中考倒计时</div>
+        <div>距 2027年深圳中考 还有</div>
+      </div>
+      <div class="countdown-numbers">
+        <div class="countdown-unit"><div class="cd-num" id="cd-days">-</div><div class="cd-unit-label">天</div></div>
+        <div class="countdown-unit"><div class="cd-num" id="cd-hours">-</div><div class="cd-unit-label">时</div></div>
+        <div class="countdown-unit"><div class="cd-num" id="cd-minutes">-</div><div class="cd-unit-label">分</div></div>
+        <div class="countdown-unit"><div class="cd-num" id="cd-seconds">-</div><div class="cd-unit-label">秒</div></div>
       </div>
     </div>
   </div>
@@ -1414,6 +1490,44 @@ function checkToggleNeeded(contentId, btnId, minCount) {
         btn.style.display = 'none';
     }
 }
+</script>
+
+<script>
+(function() {
+    var target = new Date('2027-06-28T09:00:00+08:00');
+    var elDays = document.getElementById('cd-days');
+    var elHours = document.getElementById('cd-hours');
+    var elMinutes = document.getElementById('cd-minutes');
+    var elSeconds = document.getElementById('cd-seconds');
+    var bar = document.getElementById('zhongkao-countdown');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function update() {
+        var now = new Date();
+        var diff = target - now;
+
+        if (diff <= 0) {
+            if (bar) {
+                bar.innerHTML = '<div class="countdown-ended">2027年深圳中考已开始，祝各位考生金榜题名！</div>';
+            }
+            return;
+        }
+
+        var days = Math.floor(diff / 86400000);
+        var hours = Math.floor((diff % 86400000) / 3600000);
+        var minutes = Math.floor((diff % 3600000) / 60000);
+        var seconds = Math.floor((diff % 60000) / 1000);
+
+        if (elDays) elDays.textContent = days;
+        if (elHours) elHours.textContent = pad(hours);
+        if (elMinutes) elMinutes.textContent = pad(minutes);
+        if (elSeconds) elSeconds.textContent = pad(seconds);
+    }
+
+    update();
+    setInterval(update, 1000);
+})();
 </script>
 
 </body></html>
